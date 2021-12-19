@@ -23,3 +23,6 @@ Route::get
 Route::get("hello/ok",function(){
     echo "<h1>chao cai gi </h1>";
 });
+Route::get("/name/{name}",function($name){// truyen tham so tren url
+    echo "ten ban la :".$name;
+})->where(['name'=>'[a-z]+']);//regular expression
