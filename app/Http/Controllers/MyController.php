@@ -11,4 +11,14 @@ class MyController extends Controller
     {
         echo "xin chao ban vua goi controller";
     }
+    // nhan tham so tu route
+    public function thamso($name)
+    {
+        echo "tham so chuyen :".$name;
+    }
+    // goi sang 1 route khac
+    public function chuyen_route()
+    {
+        return redirect()->route('route2');
+    }
 }

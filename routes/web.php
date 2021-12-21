@@ -53,3 +53,7 @@ Route::group(['prefix'=>'myroute'],function(){
 
 // goi controller
 Route::get('/goi', [MyController::class, 'Hello']);
+// chuyen tham so
+Route::get('thamso/{name}',[MyController::class,'thamso']);
+// goi controlle de controller truyen sang 1 route moi
+route::get('goi_controller',[MyController::class,'chuyen_route']);
