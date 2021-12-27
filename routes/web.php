@@ -57,3 +57,13 @@ Route::get('/goi', [MyController::class, 'Hello']);
 Route::get('thamso/{name}',[MyController::class,'thamso']);
 // goi controlle de controller truyen sang 1 route moi
 route::get('goi_controller',[MyController::class,'chuyen_route']);
+//url
+Route::get("goirequest",[MyController::class,'ham_request']);
+// gui nhan du lieu voi request
+route::get("getform",function(){
+    return view('login');
+});
+
+// xu ly login
+route::get("xuly",[MyController::class,'xuly'])->name("xuly");
+
