@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Http\Response;
 class MyController extends Controller
 {
     //
@@ -48,5 +48,15 @@ class MyController extends Controller
         if($request->has('username')) echo "ban da nhap username<br/>";
         else echo "ban chua nhap username<br/>";
 
+   }
+   public function setCookie()
+   {
+       $response=new Response();
+       $response->withCookie('khoahoc','lap trinh laravel',1);
+       return $response;
+   }
+   public function getCookie(Request $request)
+   {
+       return $request->cookie('khoahoc');
    }
 }

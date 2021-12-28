@@ -66,4 +66,7 @@ route::get("getform",function(){
 
 // xu ly login
 route::get("xuly",[MyController::class,'xuly'])->name("xuly");
+//goi ham cookie
+route::get('setCookie',[MyController::class,'setCookie']);
+route::get('getCookie',[MyController::class,'getCookie']);
 
