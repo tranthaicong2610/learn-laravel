@@ -130,6 +130,117 @@ route::get('/hello/{id}',function($id){
 // Tham số & Tiêm phụ thuộc
 // Nếu tuyến của bạn có các phần phụ thuộc mà bạn muốn vùng chứa dịch vụ Laravel tự động đưa vào lệnh gọi lại của tuyến,
 //  bạn nên liệt kê các thông số tuyến sau các phần phụ thuộc của mình:
-Route::get('/user/{id}', function (Request $request, $id) {
-    return 'User '.$id;
+// Route::get('/user/{id}', function (Request $request, $id) {
+//     return 'User '.$id;
+// });
+// Các thông số tùy chọn
+// Đôi khi, bạn có thể cần chỉ định một tham số định tuyến có thể không phải lúc nào cũng có trong URI.
+// Bạn có thể làm như vậy bằng cách đặt một ?dấu sau tên tham số. Đảm bảo cung cấp cho biến tương ứng của tuyến đường một giá trị mặc định:
+
+Route::get('/user/{name?}', function ($name = null) {
+    return $name;
+});
+
+Route::get('/user/{name?}', function ($name = 'John') {
+    return $name;
+});
+// Ràng buộc về Cụm từ Thông dụng
+// Bạn có thể giới hạn định dạng của các tham số tuyến đường của mình bằng cách sử dụng wherephương thức trên một cá thể tuyến đường. Phương wherethức chấp nhận tên của tham số và một biểu thức chính quy xác định cách tham số sẽ bị ràng buộc:
+
+Route::get('/user/{name}', function ($name) {
+    //
+})->where('name', '[A-Za-z]+');
+
+Route::get('/user/{id}', function ($id) {
+    //
+})->where('id', '[0-9]+');
+
+Route::get('/user/{id}/{name}', function ($id, $name) {
+    //
+})->where(['id' => '[0-9]+', 'name' => '[a-z]+']);
+// Để thuận tiện, một số mẫu biểu thức chính quy thường được sử dụng có các phương thức trợ giúp cho phép bạn nhanh chóng thêm các ràng buộc mẫu vào các tuyến của mình:
+
+Route::get('/user/{id}/{name}', function ($id, $name) {
+    //
+})->whereNumber('id')->whereAlpha('name');
+
+Route::get('/user/{name}', function ($name) {
+    //
+})->whereAlphaNumeric('name');
+
+Route::get('/user/{id}', function ($id) {
+    //
+})->whereUuid('id');
+// Nếu yêu cầu đến không phù hợp với các ràng buộc của mẫu định tuyến, một phản hồi HTTP 404 sẽ được trả về.
+
+// Ràng buộc toàn cầu
+// Nếu bạn muốn tham số định tuyến luôn bị giới hạn bởi một biểu thức chính quy, bạn có thể sử dụng patternphương thức này.
+// Bạn nên xác định các mẫu này trong bootphương thức của App\Providers\RouteServiceProviderlớp mình:
+
+// /**
+//  * Define your route model bindings, pattern filters, etc.
+//  *
+//  * @return void
+//  */
+// public function boot()
+// {
+//     Route::pattern('id', '[0-9]+');
+// }
+// Khi mẫu đã được xác định, nó sẽ tự động được áp dụng cho tất cả các tuyến sử dụng tên tham số đó:
+
+// Route::get('/user/{id}', function ($id) {
+//     // Only executed if {id} is numeric...
+// });
+
+// Dấu gạch chéo được mã hóa về phía trước
+// Thành phần định tuyến Laravel cho phép tất cả các ký tự ngoại trừ /có mặt trong các giá trị tham số tuyến.
+//  Bạn phải cho phép rõ ràng /là một phần của trình giữ chỗ của mình bằng cách sử dụng wherebiểu thức chính quy có điều kiện:
+Route::get('/search/{search}', function ($search) {
+    return $search;
+})->where('search', '.*');
+// Các tuyến đường được đặt tên
+// Các tuyến đường được đặt tên cho phép tạo URL hoặc chuyển hướng thuận tiện cho các tuyến đường cụ thể. Bạn có thể chỉ định tên cho một tuyến bằng cách xâu chuỗi namephương thức vào định nghĩa tuyến:
+
+Route::get('/user/profile', function () {
+    //
+})->name('profile');
+// Bạn cũng có thể chỉ định tên tuyến cho các hành động của bộ điều khiển:
+
+Route::get(
+    '/user/profile',
+    [UserProfileController::class, 'show']
+)->name('profile');
+
+
+// Tạo URL cho các tuyến đường được đặt tên
+// Khi bạn đã chỉ định tên cho một tuyến nhất định, bạn có thể sử dụng tên của tuyến đó khi tạo URL hoặc chuyển hướng thông qua các chức năng của Laravel routevà redirecttrợ giúp:
+
+// // Generating URLs...
+// $url = route('profile');
+
+// // Generating Redirects...
+// return redirect()->route('profile');
+// Nếu tuyến được đặt tên xác định các tham số, bạn có thể chuyển các tham số làm đối số thứ hai cho routehàm. Các tham số đã cho sẽ tự động được chèn vào URL được tạo ở các vị trí chính xác của chúng:
+
+// Route::get('/user/{id}/profile', function ($id) {
+//     //
+// })->name('profile');
+
+// $url = route('profile', ['id' => 1]);
+// Nếu bạn chuyển các tham số bổ sung vào mảng, các cặp khóa / giá trị đó sẽ tự động được thêm vào chuỗi truy vấn của URL đã tạo:
+
+// Route::get('/user/{id}/profile', function ($id) {
+//     //
+// })->name('profile');
+
+// $url = route('profile', ['id' => 1, 'photos' => 'yes']);
+
+// // /user/1/profile?photos=yes
+
+
+
+
+
+route::get('learn_laravel',function(){
+    return view('learn');
 });
